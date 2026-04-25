@@ -21,10 +21,10 @@ zhangshuhui.com
 
 ## Git 命令
 
-第一次推送时，把下面的 `<your-github-username>` 替换为你的 GitHub 用户名：
+第一次推送时使用当前 GitHub 账号 `ABC-work`：
 
 ```sh
-git remote add origin https://github.com/<your-github-username>/zhangshuhui.com.git
+git remote add origin https://github.com/ABC-work/zhangshuhui.com.git
 git branch -M main
 git push -u origin main
 ```
@@ -58,7 +58,7 @@ www 子域名：
 ```text
 Type: CNAME
 Name: www
-Value: <your-github-username>.github.io
+Value: ABC-work.github.io
 ```
 
 ## 当前站点文件
