@@ -1,10 +1,12 @@
 const canvas = document.querySelector("#field");
 const ctx = canvas.getContext("2d");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const pointer = { x: 0, y: 0, active: false };
 let particles = [];
 let width = 0;
 let height = 0;
 let pixelRatio = 1;
+let animationFrame = 0;
 
 function resize() {
   pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
@@ -78,7 +80,7 @@ function draw() {
     }
   });
 
-  requestAnimationFrame(draw);
+  animationFrame = requestAnimationFrame(draw);
 }
 
 window.addEventListener("resize", resize);
@@ -106,4 +108,17 @@ function updateLocalTime() {
 updateLocalTime();
 setInterval(updateLocalTime, 30000);
 resize();
-draw();
+
+function syncMotionPreference() {
+  if (reducedMotion.matches) {
+    cancelAnimationFrame(animationFrame);
+    ctx.clearRect(0, 0, width, height);
+    return;
+  }
+
+  cancelAnimationFrame(animationFrame);
+  draw();
+}
+
+reducedMotion.addEventListener("change", syncMotionPreference);
+syncMotionPreference();
