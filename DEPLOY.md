@@ -14,7 +14,7 @@
 5. 在 `Custom domain` 填入：
 
 ```text
-zhangshuhui.com
+www.zhangshuhui.com
 ```
 
 6. 等 DNS 生效后，勾选 `Enforce HTTPS`。
@@ -33,7 +33,7 @@ git push -u origin main
 
 在域名服务商后台添加这些记录。
 
-根域名 `zhangshuhui.com`：
+如果域名服务商支持免费添加 4 条 A 记录，可以配置根域名 `zhangshuhui.com`：
 
 ```text
 Type: A
@@ -53,7 +53,7 @@ Name: @
 Value: 185.199.111.153
 ```
 
-www 子域名：
+当前推荐使用 `www` 子域名：
 
 ```text
 Type: CNAME

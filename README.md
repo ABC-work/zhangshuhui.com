@@ -14,6 +14,6 @@ python3 -m http.server 5173
 
 这个目录可以直接部署到 GitHub Pages、Netlify、Vercel 或任意静态文件服务器。
 
-如果使用 GitHub Pages，保留 `CNAME` 文件即可绑定 `zhangshuhui.com`。
+如果使用 GitHub Pages，保留 `CNAME` 文件即可绑定 `www.zhangshuhui.com`。
 
 详细步骤见 `DEPLOY.md`。
