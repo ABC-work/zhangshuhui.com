@@ -12,7 +12,14 @@ HTML_FILES = [
     ROOT / "404.html",
 ]
 FORBIDDEN = ["算法工程师", "Knockit", "AI Patents", "App Store Creator", "这里后续可以", "Draft"]
-REQUIRED_HOME = ["AI 应用产品经理", "缩短约 93%", "Collab", "Creator Hunter", "下载简历"]
+FORBIDDEN_PUBLIC_COPY = ["下载简历", "zhang-shuhui-ai-product-manager.pdf"]
+REQUIRED_HOME = [
+    "复杂业务，我负责把它做成产品。",
+    'data-flagship="collab"',
+    "3 个真实活动",
+    "50+",
+    "93%",
+]
 
 
 class PageParser(HTMLParser):
@@ -69,6 +76,9 @@ def main():
         for phrase in FORBIDDEN:
             if phrase in text:
                 errors.append(f"forbidden phrase {phrase!r}: {page.relative_to(ROOT)}")
+        for phrase in FORBIDDEN_PUBLIC_COPY:
+            if phrase in text:
+                errors.append(f"forbidden public resume reference {phrase!r}: {page.relative_to(ROOT)}")
         for src, alt in parser.images:
             if alt is None:
                 errors.append(f"image missing alt: {src} in {page.relative_to(ROOT)}")
