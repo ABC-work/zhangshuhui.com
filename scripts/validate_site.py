@@ -14,7 +14,7 @@ HTML_FILES = [
 FORBIDDEN = ["算法工程师", "Knockit", "AI Patents", "App Store Creator", "这里后续可以", "Draft"]
 FORBIDDEN_PUBLIC_COPY = ["下载简历", "zhang-shuhui-ai-product-manager.pdf"]
 REQUIRED_HOME = [
-    "复杂业务，我负责把它做成产品。",
+    "把复杂业务，",
     'data-flagship="collab"',
     "3 个真实活动",
     "50+",
@@ -93,6 +93,15 @@ def main():
     for phrase in REQUIRED_HOME:
         if phrase not in home:
             errors.append(f"home missing required proof: {phrase}")
+    for page in HTML_FILES[:4]:
+        if not page.exists():
+            continue
+        text = page.read_text(encoding="utf-8")
+        h1 = re.search(r"<h1[^>]*>(.*?)</h1>", text, re.S)
+        if h1 and "<br" in h1.group(1):
+            errors.append(f"forced line break in primary heading: {page.relative_to(ROOT)}")
+    if "evidence-focus" not in home:
+        errors.append("home missing focused product evidence")
     readable_pages = [p.read_text(errors="ignore") for p in HTML_FILES if p.exists()]
     if re.search(r"(?:api[_-]?key|secret|password)\s*[:=]", "\n".join(readable_pages), re.I):
         errors.append("possible secret-like content in HTML")
