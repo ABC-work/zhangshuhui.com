@@ -14,12 +14,22 @@ HTML_FILES = [
 FORBIDDEN = ["算法工程师", "Knockit", "AI Patents", "App Store Creator", "这里后续可以", "Draft"]
 FORBIDDEN_PUBLIC_COPY = ["下载简历", "zhang-shuhui-ai-product-manager.pdf"]
 REQUIRED_HOME = [
-    "把复杂业务，",
+    "约 2 年",
+    "全球达人营销",
+    "我的职责",
+    "证据边界",
+    "约 7 天",
+    "0.5 天",
     'class="project-grid"',
     "3 个真实活动",
     "50+",
-    "93%",
 ]
+
+REQUIRED_CASE_COPY = {
+    "collab.html": ["BRIEF", "候选确认", "指标口径", "中位数", "我的职责"],
+    "creator-intelligence.html": ["模型层", "规则层", "人工层", "评测缺口", "失败状态"],
+    "airacle-website.html": ["补充案例", "商业闭环"],
+}
 
 
 class PageParser(HTMLParser):
@@ -95,11 +105,16 @@ def main():
             errors.append(f"home missing required proof: {phrase}")
     if home.count('class="project-card') != 3:
         errors.append("home must contain exactly three project cards")
+    if "≈93%" in home:
+        errors.append("home must show raw before/after timing instead of a derived percentage")
     if 'class="flagship"' in home:
         errors.append("home still contains the expanded flagship narrative")
     case_pages = [page for page in HTML_FILES if page.parent.name == "cases"]
     for page in case_pages:
         text = page.read_text(encoding="utf-8")
+        for phrase in REQUIRED_CASE_COPY.get(page.name, []):
+            if phrase not in text:
+                errors.append(f"case missing evidence {phrase!r}: {page.relative_to(ROOT)}")
         if text.count('role="tab"') != 4 or text.count('role="tabpanel"') != 4:
             errors.append(f"case must contain four tabs and panels: {page.relative_to(ROOT)}")
         for tab_id in ("overview", "decisions", "product", "outcome"):
