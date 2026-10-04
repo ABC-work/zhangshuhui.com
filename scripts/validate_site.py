@@ -15,7 +15,7 @@ FORBIDDEN = ["算法工程师", "Knockit", "AI Patents", "App Store Creator", "�
 FORBIDDEN_PUBLIC_COPY = ["下载简历", "zhang-shuhui-ai-product-manager.pdf"]
 REQUIRED_HOME = [
     "把复杂业务，",
-    'data-flagship="collab"',
+    'class="project-grid"',
     "3 个真实活动",
     "50+",
     "93%",
@@ -93,6 +93,20 @@ def main():
     for phrase in REQUIRED_HOME:
         if phrase not in home:
             errors.append(f"home missing required proof: {phrase}")
+    if home.count('class="project-card') != 3:
+        errors.append("home must contain exactly three project cards")
+    if 'class="flagship"' in home:
+        errors.append("home still contains the expanded flagship narrative")
+    case_pages = [page for page in HTML_FILES if page.parent.name == "cases"]
+    for page in case_pages:
+        text = page.read_text(encoding="utf-8")
+        if text.count('role="tab"') != 4 or text.count('role="tabpanel"') != 4:
+            errors.append(f"case must contain four tabs and panels: {page.relative_to(ROOT)}")
+        for tab_id in ("overview", "decisions", "product", "outcome"):
+            if f'id="{tab_id}"' not in text or f'href="#{tab_id}"' not in text:
+                errors.append(f"case missing tab hash {tab_id}: {page.relative_to(ROOT)}")
+        if 'role="tablist"' not in text:
+            errors.append(f"case missing tablist: {page.relative_to(ROOT)}")
     for page in HTML_FILES[:4]:
         if not page.exists():
             continue
